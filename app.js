@@ -20,6 +20,8 @@ DeviceDiscovery((device) => {
       mainDevice = device
       Listener.subscribeTo(mainDevice)
 
+      mainDevice.searchMusicLibrary('playlists').then()
+
 
       mainDevice.on('PlayState', result => {
         currentState = result

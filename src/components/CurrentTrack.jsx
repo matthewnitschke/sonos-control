@@ -5,11 +5,23 @@ function CurrentTrack(props) {
 
     useEffect(() => {
         props.socket.on('current-track-change', res => {
+            console.log(res)
             setCurrentTrack(res)
         })
     }, [])
 
-    return `${currentTrack.title} - ${currentTrack.artist}`
+    return <div className="current-track">
+        <div 
+            className="album-artwork"
+            style={{backgroundImage: `url(${currentTrack.albumArtURI})`}}
+        ></div>
+        <div className="track-text">
+            <div>
+                <div>{currentTrack.title}</div>
+                <div>{currentTrack.artist}</div>
+            </div>
+        </div>
+    </div>
     
 }
 

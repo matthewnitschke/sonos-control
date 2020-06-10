@@ -1,3 +1,23 @@
 .playback-control {
     display: flex;
 }
+
+.current-track {
+    display: flex;
+
+    .album-artwork {
+        width: 5rem;
+        height: 5rem;
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+
+        margin-right: .5rem;
+    }
+
+    .track-text {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
