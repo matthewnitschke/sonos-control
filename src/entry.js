@@ -5,9 +5,15 @@ import io from 'socket.io-client'
 
 import SonosController from './components/SonosController.jsx';
 
+import { Provider } from 'react-redux'
+
+import store from './store'
+
 var socket = io();
 
 ReactDOM.render(
-    <SonosController socket={socket} />,
+    <Provider store={store}>
+        <SonosController socket={socket} />,
+    </Provider>,
     document.getElementById("app")
 );

@@ -12,7 +12,7 @@ function SonosController(props) {
             display: 'flex'
         }}
     >
-        <RoomManager mainDeviceRoomName="Office" socket={props.socket}/>
+        {/* <RoomManager mainDeviceRoomName="Office" socket={props.socket}/> */}
         <PlaybackControl socket={props.socket} />
     </div>
 }

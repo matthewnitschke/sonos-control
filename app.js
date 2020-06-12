@@ -22,7 +22,6 @@ DeviceDiscovery((device) => {
 
       mainDevice.searchMusicLibrary('playlists').then()
 
-
       mainDevice.on('PlayState', result => {
         currentState = result
         io.sockets.emit('play-state-change', result)
