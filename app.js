@@ -20,7 +20,7 @@ DeviceDiscovery((device) => {
       mainDevice = device
       Listener.subscribeTo(mainDevice)
 
-      mainDevice.searchMusicLibrary('playlists').then()
+      // mainDevice.searchMusicLibrary('playlists').then()
 
       mainDevice.on('PlayState', result => {
         currentState = result
@@ -46,6 +46,8 @@ let currentTopology;
 Listener.on('ZoneGroupTopology', result => {
   currentTopology = result;
   io.sockets.emit('topology-change', result);
+
+  console.log('topo')
 })
 
 app.use(express.static("dist"));
@@ -81,8 +83,14 @@ io.on('connection', (socket) => {
   socket.emit('current-track-change', currentTrack)
   socket.emit('volume-change', currentVolume)
 
-  socket.on('play', () => mainDevice.play())
-  socket.on('pause', () => mainDevice.pause())
+  socket.on('setIsPlaying', (isPlaying) => {
+    if (isPlaying) {
+      mainDevice.play()
+    } else {
+      mainDevice.pause()
+    }
+  })
+
   socket.on('next', () => mainDevice.next())
   socket.on('previous', () => mainDevice.previous())
   socket.on('set-volume', (v) => mainDevice.setVolume(v))

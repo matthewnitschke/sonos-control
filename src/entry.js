@@ -1,19 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import io from 'socket.io-client'
+// import io from 'socket.io-client'
 
 import SonosController from './components/SonosController.jsx';
 
-import { Provider } from 'react-redux'
+// import {
+//     SonosAPIAdapter,
+//     SonosAPIContext,
+// } from './sonosApiAdapter.js'
 
-import store from './store'
+// var socket = io();
 
-var socket = io();
+// const apiAdapter = SonosAPIAdapter();
 
 ReactDOM.render(
-    <Provider store={store}>
-        <SonosController socket={socket} />,
-    </Provider>,
+    <SonosController />,
     document.getElementById("app")
 );

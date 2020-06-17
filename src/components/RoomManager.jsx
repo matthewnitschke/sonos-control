@@ -1,25 +1,29 @@
 import React, {useEffect, useState} from 'react';
 
+import { useCurrentTopology } from '../hooks/useSonos.js'
+
 function RoomManager(props) {
 
-    let [data, setData] = useState([])
+    // let [data, setData] = useState([])
     
-    useEffect(() => {
-        props.socket.on('topology-change', res => {
-            // if eventBody is empty, the topo change had nothing to do with
-            // the main device
-            if (Object.entries(res.eventBody).length > 0) {
-                console.log(res)
-                let topData = res.eventBody.ZoneGroupState.ZoneGroupState.ZoneGroups.ZoneGroup
+    // useEffect(() => {
+    //     props.socket.on('topology-change', res => {
+    //         // if eventBody is empty, the topo change had nothing to do with
+    //         // the main device
+    //         if (Object.entries(res.eventBody).length > 0) {
+    //             console.log(res)
+    //             let topData = res.eventBody.ZoneGroupState.ZoneGroupState.ZoneGroups.ZoneGroup
 
-                if (topData.length === undefined) {
-                    topData = [topData]
-                }
+    //             if (topData.length === undefined) {
+    //                 topData = [topData]
+    //             }
 
-                setData(topData)
-            }
-        })
-    }, [])
+    //             setData(topData)
+    //         }
+    //     })
+    // }, [])
+
+    let data = useCurrentTopology();
 
     let mainDeviceGroup = [];
     let otherDevices = [];

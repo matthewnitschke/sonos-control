@@ -1,23 +1,93 @@
-.playback-control {
-    display: flex;
+html, body, #app {
+    margin: 0;
+    padding: 0;
+    height: 100%;
 }
 
-.current-track {
-    display: flex;
+#app {
+    width: 800px;
+    height: 480px;
+}
 
-    .album-artwork {
-        width: 5rem;
-        height: 5rem;
+$background-color: #000;
+
+.main-container {
+    display: flex;
+    height: 100%;
+    background-color: $background-color;
+
+
+    .current-track__art {
+        height: 100%;
+
+        width: 60%;
         background-position: center;
-        background-size: contain;
+        background-size: cover;
         background-repeat: no-repeat;
 
-        margin-right: .5rem;
+        margin-right: 1rem;
+
+        box-shadow: inset -200px 0px 60px -130px $background-color;
     }
 
-    .track-text {
+    .right-panel {
+        width: 40%;
         display: flex;
-        justify-content: center;
-        align-items: center;
+        padding-right: 3rem;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .current-track__desc {
+        margin-top: 1.5rem;
+        font-weight: bold;
+
+        .track-name {
+            color: #FFF;
+            font-size: 24px;
+        }
+
+        .artist-name {
+            color: grey;
+            font-size: 14px;
+        }
+    }
+
+    .playback-control {
+        display: flex;
+        color: #FFF;
+        justify-content: space-around;
+    }
+
+    .volume-slider {
+        margin-bottom: 1.5rem;
+        
+        input { width: 100%; }
+    }
+}
+
+.panel {
+    display:flex;
+    align-items: center;
+
+    position: absolute;
+    height: 100%;
+
+    .panel-trigger {
+        font-size: .6rem;
+        display: flex;
+        flex-direction: column;
+        background-color: grey;
+        padding: .3rem;
+        i {
+            margin: .1rem 0;
+            color: #FFF;
+        }
+    }
+
+    .panel-content {
+        height: 100%;
+        background-color: grey;
+        padding: 1rem;
     }
 }

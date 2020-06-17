@@ -1,19 +1,24 @@
 import React, {useState, useEffect} from 'react';
+import {useCurrentVolume} from '../hooks/useSonos.js'
 
 function VolumeSlider(props) {
-    let [volume, setVolume] = useState(0)
-
-    useEffect(() => {
-        props.socket.once('volume-change', setVolume)
-    }, [])
+    let [currentVolume, setCurrentVolume] = useCurrentVolume()
 
     let _handleChange = (e) => {
         let newVolume = e.target.value;
-        setVolume(newVolume)
-        props.socket.emit('set-volume', newVolume)
+        setCurrentVolume(newVolume)
+        // setVolume(newVolume)
+        // props.socket.emit('set-volume', newVolume)
     }
 
-    return <input type="range" min="1" max="100" value={volume} onChange={_handleChange} />
+    return <div className="volume-slider">
+        <input
+            type="range" 
+            min="1" 
+            max="100" 
+            value={currentVolume} 
+            onChange={_handleChange} /> 
+    </div>
 }
 
 export default VolumeSlider;
