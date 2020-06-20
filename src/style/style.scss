@@ -66,6 +66,39 @@ $background-color: #000;
     }
 }
 
+.devices-panel {
+    .main-device-title {
+        color: #FFF;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    input[type="checkbox"] {
+        display: none;
+
+        & + label {
+            display: flex;
+            align-items: center;;
+            color: #FFF;
+            cursor: pointer;
+            line-height: 2;
+        }
+
+        & + label::before {
+            content: '';
+            display: inline-block;
+            margin-right: .3rem;
+            border: solid 2px #FFF;
+            width: 1em;
+            height: 1em;
+        }
+
+        &:checked + label::before {
+            background-color: #FFF;
+        }
+    }
+}
+
 .panel {
     display:flex;
     align-items: center;
@@ -89,5 +122,6 @@ $background-color: #000;
         height: 100%;
         background-color: grey;
         padding: 1rem;
+        min-width: 18rem;
     }
 }

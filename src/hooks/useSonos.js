@@ -44,7 +44,7 @@ export function useCurrentVolume() {
         currentVolume,
         (newVolume) => {
             setCurrentVolume(newVolume)
-            
+
             if (receiveEventsTimeout != null) {
                 clearTimeout(receiveEventsTimeout)
                 receiveEventsTimeout = null
@@ -54,32 +54,54 @@ export function useCurrentVolume() {
                 receiveEvents = true
                 receiveEventsTimeout = null
             }, 1000)
-            
+
             receiveEvents = false
             socket.emit('set-volume', newVolume);
         }
     ]
 }
 
-export function useCurrentTopology() {
-    let [topo, setTopo] = useState([])
+export function useCurrentTopology(mainDeviceRoomName) {
+    let [devices, setDevices] = useState({})
+
 
     socket.on('topology-change', res => {
-        // if eventBody is empty, the topo change had nothing to do with
-        // the main device
-        if (Object.entries(res.eventBody).length > 0) {
-            console.log('topo-change', res);
-            let topData = res.eventBody.ZoneGroupState.ZoneGroupState.ZoneGroups.ZoneGroup
+        console.log('topo-change', res);
+        let topData = res.eventBody.ZoneGroupState.ZoneGroupState.ZoneGroups.ZoneGroup
 
-            if (topData.length === undefined) {
-                topData = [topData]
-            }
-
-            setTopo(topData)
+        if (topData.length === undefined) {
+            topData = [topData]
         }
+
+        let newDevices = {};
+        topData.forEach(group => {
+            let isMain = false;
+            group.ZoneGroupMember.forEach(zoneMember => {
+                if (zoneMember.ZoneName == mainDeviceRoomName) {
+                    isMain = true;
+                }
+            })
+
+            group.ZoneGroupMember.forEach((zone) => {
+                // we dont want to add the main device to the list of checkbox devices
+                if (zone.ZoneName != mainDeviceRoomName) {
+                    newDevices[zone.ZoneName] = isMain
+                }
+            });
+        });
+
+        setDevices(newDevices)
     })
 
-    return topo
+    let addDevice = (deviceName) => {
+        socket.emit('add-device', deviceName)
+    }
+
+    let removeDevice = (deviceName) => {
+        socket.emit('remove-device', deviceName)
+    }
+
+    return [devices, addDevice, removeDevice]
 }
 
 export function useSonosActions() {
@@ -88,3 +110,29 @@ export function useSonosActions() {
         previous: () => socket.emit('previous')
     }
 }
+
+// let mainDeviceGroup = [];
+// let otherDevices = [];
+// data.forEach(group => {
+//     let isMain = false;
+
+//     group.ZoneGroupMember.forEach(zoneMember => {
+//         if (zoneMember.ZoneName == props.mainDeviceRoomName) {
+//             isMain = true;
+//         }
+//     })
+
+//     if (!isMain) {
+//         otherDevices = otherDevices.concat(group.ZoneGroupMember)
+//     } else {
+//         mainDeviceGroup = group.ZoneGroupMember;
+//     }
+// })
+
+// let nonMainDevices = mainDeviceGroup
+//     .concat(otherDevices)
+//     .filter(zoneMember => zoneMember.ZoneName != props.mainDeviceRoomName)
+
+// nonMainDevices.sort((a, b) => {
+//     return a.ZoneName.localeCompare(b.ZoneName)
+// });

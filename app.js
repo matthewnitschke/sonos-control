@@ -44,10 +44,11 @@ DeviceDiscovery((device) => {
 
 let currentTopology;
 Listener.on('ZoneGroupTopology', result => {
-  currentTopology = result;
-  io.sockets.emit('topology-change', result);
-
-  console.log('topo')
+  if (Object.entries(result.eventBody).length > 0) {
+    currentTopology = result;
+    io.sockets.emit('topology-change', result);
+    console.log('topo')
+  }
 })
 
 app.use(express.static("dist"));
@@ -78,10 +79,14 @@ app.get('/groups/:deviceName/:action', async (req, res) => {
 io.on('connection', (socket) => {
   console.log('a user connected');
 
-  socket.emit('topology-change', currentTopology)
-  socket.emit('play-state-change', currentState)
-  socket.emit('current-track-change', currentTrack)
-  socket.emit('volume-change', currentVolume)
+  // give the frontend a bit to catch up before emitting updates
+  setTimeout(() => {
+    console.log('Emitting Updates')
+    socket.emit('topology-change', currentTopology)
+    socket.emit('play-state-change', currentState)
+    socket.emit('current-track-change', currentTrack)
+    socket.emit('volume-change', currentVolume)
+  }, 1000)
 
   socket.on('setIsPlaying', (isPlaying) => {
     if (isPlaying) {
@@ -94,6 +99,8 @@ io.on('connection', (socket) => {
   socket.on('next', () => mainDevice.next())
   socket.on('previous', () => mainDevice.previous())
   socket.on('set-volume', (v) => mainDevice.setVolume(v))
+  socket.on('add-device', (deviceName) => otherDevices[deviceName].joinGroup(mainDeviceRoomName))
+  socket.on('remove-device', (deviceName) => otherDevices[deviceName].leaveGroup())
 });
 
 http.listen(port, () =>

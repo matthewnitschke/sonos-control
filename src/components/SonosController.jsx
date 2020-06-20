@@ -10,20 +10,20 @@ import Panel from './Panel';
 import RoomManager from './RoomManager';
 
 function SonosController() {
-    return <div
-        className="main-container">
+    
 
-            <Panel position="left">
-                <RoomManager mainDeviceRoomName="Office"/>
-            </Panel>
+    return <div className="main-container">
+        <Panel position="left">
+            <RoomManager mainDeviceRoomName="Office"/>
+        </Panel>
 
-            <CurrentTrackArt />
+        <CurrentTrackArt />
 
-            <div className="right-panel">
-                <CurrentTrackDesc />
-                <PlaybackControl />
-                <VolumeSlider />
-            </div>
+        <div className="right-panel">
+            <CurrentTrackDesc />
+            <PlaybackControl />
+            <VolumeSlider />
+        </div>
     </div>
 }
 
