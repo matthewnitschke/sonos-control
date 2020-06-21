@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+
 import '../style/style.scss';
 
 import PlaybackControl from './PlaybackControl';
@@ -8,6 +9,7 @@ import CurrentTrackArt from './CurrentTrackArt';
 import VolumeSlider from './VolumeSlider';
 import Panel from './Panel';
 import RoomManager from './RoomManager';
+import SpotifyLibrary from './SpotifyLibrary';
 
 function SonosController() {
     
@@ -24,6 +26,10 @@ function SonosController() {
             <PlaybackControl />
             <VolumeSlider />
         </div>
+
+        <Panel position="right">
+            <SpotifyLibrary />
+        </Panel>
     </div>
 }
 

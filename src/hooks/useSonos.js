@@ -107,32 +107,8 @@ export function useCurrentTopology(mainDeviceRoomName) {
 export function useSonosActions() {
     return {
         next: () => socket.emit('next'),
-        previous: () => socket.emit('previous')
+        previous: () => socket.emit('previous'),
+        playTrack: (uri) => socket.emit('play-track', uri),
+        playUserPlaylist: (uri) => socket.emit('play-user-playlist', uri)
     }
 }
-
-// let mainDeviceGroup = [];
-// let otherDevices = [];
-// data.forEach(group => {
-//     let isMain = false;
-
-//     group.ZoneGroupMember.forEach(zoneMember => {
-//         if (zoneMember.ZoneName == props.mainDeviceRoomName) {
-//             isMain = true;
-//         }
-//     })
-
-//     if (!isMain) {
-//         otherDevices = otherDevices.concat(group.ZoneGroupMember)
-//     } else {
-//         mainDeviceGroup = group.ZoneGroupMember;
-//     }
-// })
-
-// let nonMainDevices = mainDeviceGroup
-//     .concat(otherDevices)
-//     .filter(zoneMember => zoneMember.ZoneName != props.mainDeviceRoomName)
-
-// nonMainDevices.sort((a, b) => {
-//     return a.ZoneName.localeCompare(b.ZoneName)
-// });

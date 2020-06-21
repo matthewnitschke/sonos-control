@@ -4,6 +4,10 @@ const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
+const spotifyApi = require('./src/spotify-api.js')
+
+const { spotifyUserId } = require('./src/environment.js')
+
 const { DeviceDiscovery, Listener } = require("sonos");
 
 const mainDeviceRoomName = 'Office'
@@ -19,8 +23,6 @@ DeviceDiscovery((device) => {
       console.log(`Found Main Device: ${desc.roomName}:${device.host}`)
       mainDevice = device
       Listener.subscribeTo(mainDevice)
-
-      // mainDevice.searchMusicLibrary('playlists').then()
 
       mainDevice.on('PlayState', result => {
         currentState = result
@@ -55,26 +57,11 @@ app.use(express.static("dist"));
 
 app.get("/", (req, res) => res.send("Hello World!"));
 
-app.get("/devices", (req, res) => res.send(devices));
+app.get('/spotify-library', async (req, res) => {
+  let playlists = await spotifyApi.getUserPlaylists()
 
-app.get('/groups', async (req, res) => {
-  let groups = await mainDevice.getAllGroups();
-  res.send(groups);
-});
-
-app.get('/groups/:deviceName/:action', async (req, res) => {
-  const { deviceName, action } = req.params;
-
-  console.log(`${deviceName} : ${action}`);
-
-  if (action == 'add') {
-    otherDevices[deviceName].joinGroup(mainDeviceRoomName);
-  } else {
-    otherDevices[deviceName].leaveGroup();
-  }
-
-  res.send('Ok')
-});
+  res.send(playlists)
+})
 
 io.on('connection', (socket) => {
   console.log('a user connected');
@@ -101,6 +88,14 @@ io.on('connection', (socket) => {
   socket.on('set-volume', (v) => mainDevice.setVolume(v))
   socket.on('add-device', (deviceName) => otherDevices[deviceName].joinGroup(mainDeviceRoomName))
   socket.on('remove-device', (deviceName) => otherDevices[deviceName].leaveGroup())
+  socket.on('play-user-playlist', (uri) => {
+    let parts = uri.split(':')
+    let id = parts[parts.length-1]
+    let correctedURI = `spotify:user:${spotifyUserId}:playlist:${id}`
+    
+    mainDevice.flush()
+    mainDevice.queue(correctedURI);
+  })
 });
 
 http.listen(port, () =>

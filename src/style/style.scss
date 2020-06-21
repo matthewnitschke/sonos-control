@@ -2,6 +2,8 @@ html, body, #app {
     margin: 0;
     padding: 0;
     height: 100%;
+
+    overflow: hidden;
 }
 
 #app {
@@ -103,8 +105,12 @@ $background-color: #000;
     display:flex;
     align-items: center;
 
-    position: absolute;
+    position: fixed;
     height: 100%;
+
+    &.panel-right {
+        right:0;
+    }
 
     .panel-trigger {
         font-size: .6rem;
@@ -123,5 +129,21 @@ $background-color: #000;
         background-color: grey;
         padding: 1rem;
         min-width: 18rem;
+
+        overflow: auto;
+    }
+}
+
+.spotify-library {
+    .header {
+        font-weight: bold;
+        color: #FFF;
+        font-size: 24px;
+    }
+
+    .playlist-item {
+        color: #FFF;
+        margin-bottom: .5rem;
+        cursor: pointer;
     }
 }
