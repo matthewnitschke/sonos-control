@@ -4,11 +4,8 @@ html, body, #app {
     height: 100%;
 
     overflow: hidden;
-}
 
-#app {
-    width: 800px;
-    height: 480px;
+    font-family: 'Muli', sans-serif;
 }
 
 $background-color: #000;
@@ -46,12 +43,12 @@ $background-color: #000;
 
         .track-name {
             color: #FFF;
-            font-size: 24px;
+            font-size: 32px;
         }
 
         .artist-name {
             color: grey;
-            font-size: 14px;
+            font-size: 18px;
         }
     }
 
@@ -117,7 +114,7 @@ $background-color: #000;
         display: flex;
         flex-direction: column;
         background-color: grey;
-        padding: .3rem;
+        padding: .5rem;
         i {
             margin: .1rem 0;
             color: #FFF;
@@ -132,14 +129,17 @@ $background-color: #000;
 
         overflow: auto;
     }
-}
 
-.spotify-library {
-    .header {
+    .panel-title {
         font-weight: bold;
         color: #FFF;
         font-size: 24px;
+        margin: .7rem 0;
+        text-transform: uppercase;
     }
+}
+
+.spotify-library {
 
     .playlist-item {
         color: #FFF;

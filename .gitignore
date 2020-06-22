@@ -1,5 +1,7 @@
-.cache
-node_modules
-dist
-yarn-error.log
-runner.sh
+**/.dart_tool
+**/.packages
+**/log.txt
+**/build
+
+**/node_modules
+server-runner.sh

@@ -4,11 +4,11 @@ const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
-const spotifyApi = require('./src/spotify-api.js')
+const spotifyApi = require('./spotify_api.js')
 
-const { spotifyUserId } = require('./src/environment.js')
+const { spotifyUserId } = require('./environment.js')
 
-const { DeviceDiscovery, Listener } = require("sonos");
+const { DeviceDiscovery, Listener } = require('sonos');
 
 const mainDeviceRoomName = 'Office'
 let mainDevice;
@@ -46,22 +46,41 @@ DeviceDiscovery((device) => {
 
 let currentTopology;
 Listener.on('ZoneGroupTopology', result => {
-  if (Object.entries(result.eventBody).length > 0) {
-    currentTopology = result;
-    io.sockets.emit('topology-change', result);
-    console.log('topo')
+  if (Object.entries(result.eventBody).length == 0) {
+    return;
   }
+
+  let data = result.eventBody.ZoneGroupState.ZoneGroupState.ZoneGroups.ZoneGroup;
+
+  if (data.length === undefined) {
+    data = [data]
+  }
+
+  let newDevices = {};
+  data.forEach(group => {
+      let isMain = false;
+      group.ZoneGroupMember.forEach(zoneMember => {
+          if (zoneMember.ZoneName == mainDeviceRoomName) {
+              isMain = true;
+          }
+      })
+
+      group.ZoneGroupMember.forEach((zone) => {
+          // we dont want to add the main device to the list of checkbox devices
+          if (zone.ZoneName != mainDeviceRoomName) {
+              newDevices[zone.ZoneName] = isMain
+          }
+      });
+  });
+
+  console.log(newDevices);
+
+  currentTopology = newDevices;
+  io.sockets.emit('topology-change', newDevices);  
 })
 
 app.use(express.static("dist"));
 
-app.get("/", (req, res) => res.send("Hello World!"));
-
-app.get('/spotify-library', async (req, res) => {
-  let playlists = await spotifyApi.getUserPlaylists()
-
-  res.send(playlists)
-})
 
 io.on('connection', (socket) => {
   console.log('a user connected');
@@ -86,15 +105,29 @@ io.on('connection', (socket) => {
   socket.on('next', () => mainDevice.next())
   socket.on('previous', () => mainDevice.previous())
   socket.on('set-volume', (v) => mainDevice.setVolume(v))
-  socket.on('add-device', (deviceName) => otherDevices[deviceName].joinGroup(mainDeviceRoomName))
-  socket.on('remove-device', (deviceName) => otherDevices[deviceName].leaveGroup())
-  socket.on('play-user-playlist', (uri) => {
-    let parts = uri.split(':')
-    let id = parts[parts.length-1]
-    let correctedURI = `spotify:user:${spotifyUserId}:playlist:${id}`
-    
+  socket.on('add-device-to-zone', (deviceName) => otherDevices[deviceName].joinGroup(mainDeviceRoomName))
+  socket.on('remove-device-from-zone', (deviceName) => otherDevices[deviceName].leaveGroup())
+  socket.on('play-uri', (uri) => {
     mainDevice.flush()
-    mainDevice.queue(correctedURI);
+    mainDevice.queue(uri);
+    mainDevice.play();
+  })
+
+  socket.on('sonos-library', async (resp) => {
+    let playlists = await spotifyApi.getUserPlaylists()
+
+    playlists = playlists.body.items.map((playlist) => {
+      let parts = playlist.uri.split(':')
+      let id = parts[parts.length-1]
+      let correctedURI = `spotify:user:${spotifyUserId}:playlist:${id}`
+
+      return {
+        name: playlist.name,
+        uri: correctedURI
+      }
+    })
+
+    resp(playlists);
   })
 });
 
