@@ -79,7 +79,7 @@ Listener.on('ZoneGroupTopology', result => {
   io.sockets.emit('topology-change', newDevices);  
 })
 
-app.use(express.static("dist"));
+app.get('/', (req, res) => res.send('Hello World!'))
 
 
 io.on('connection', (socket) => {
