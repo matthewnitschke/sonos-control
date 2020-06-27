@@ -1,19 +1,27 @@
-# FROM google/dart:2.7
+# Client build step
+FROM google/dart:2.8 as client_builder
+WORKDIR /app/
+ADD client/pubspec.yaml .
+ADD client/pubspec.lock .
+RUN pub get
 
-# WORKDIR /client/
-# ADD client/pubspec.yaml /client
-# RUN pub get
 
-# Build step? how to generate js code?
+ADD client/build.yaml .
+ADD client/lib ./lib
+ADD client/web ./web
 
+RUN pub run build_runner build --delete-conflicting-outputs --release -o build
+
+# Server build step
 FROM node
 
-WORKDIR /server/
-ADD server/package.json /server
-ADD server/yarn.lock /server
+COPY --from=client_builder /app/build /app
+
+WORKDIR /app/
+ADD server/package.json .
+ADD server/yarn.lock .
 RUN yarn install
 
-ADD server server
+ADD server .
 
 CMD ["yarn", "start"]
-

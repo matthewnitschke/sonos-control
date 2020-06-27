@@ -1,3 +1,5 @@
+const path = require('path')
+
 const port = 3000;
 const express = require('express');
 const app = express();
@@ -19,6 +21,7 @@ let currentTrack;
 let currentVolume;
 DeviceDiscovery((device) => {
   device.deviceDescription().then(desc => {
+    console.log(`Device Found: ${desc.roomName}`);
     if (desc.roomName == mainDeviceRoomName) {
       console.log(`Found Main Device: ${desc.roomName}:${device.host}`)
       mainDevice = device
@@ -79,7 +82,10 @@ Listener.on('ZoneGroupTopology', result => {
   io.sockets.emit('topology-change', newDevices);  
 })
 
-app.get('/', (req, res) => res.send('Hello World!'))
+app.use(express.static('web'))
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname + '/web/index.html'));
+})
 
 
 io.on('connection', (socket) => {
@@ -114,20 +120,20 @@ io.on('connection', (socket) => {
   })
 
   socket.on('sonos-library', async (resp) => {
-    let playlists = await spotifyApi.getUserPlaylists()
+    // let playlists = await spotifyApi.getUserPlaylists()
 
-    playlists = playlists.body.items.map((playlist) => {
-      let parts = playlist.uri.split(':')
-      let id = parts[parts.length-1]
-      let correctedURI = `spotify:user:${spotifyUserId}:playlist:${id}`
+    // playlists = playlists.body.items.map((playlist) => {
+    //   let parts = playlist.uri.split(':')
+    //   let id = parts[parts.length-1]
+    //   let correctedURI = `spotify:user:${spotifyUserId}:playlist:${id}`
 
-      return {
-        name: playlist.name,
-        uri: correctedURI
-      }
-    })
+    //   return {
+    //     name: playlist.name,
+    //     uri: correctedURI
+    //   }
+    // })
 
-    resp(playlists);
+    // resp(playlists);
   })
 });
 
