@@ -82,6 +82,11 @@ Listener.on('ZoneGroupTopology', result => {
   io.sockets.emit('topology-change', newDevices);  
 })
 
+// app.use(express.static(path.join(__dirname, '..', 'client/build/web/')))
+// app.get('/', (req, res) => {
+//   res.sendFile(path.join(__dirname, '..', 'client/build/web/index.html'));
+// })
+
 app.use(express.static('web'))
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname + '/web/index.html'));

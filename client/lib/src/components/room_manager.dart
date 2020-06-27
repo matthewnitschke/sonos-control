@@ -50,7 +50,7 @@ class RoomManagerComponent extends UiComponent2<RoomManagerProps> {
             ..htmlFor = speakerName
           )(speakerName),
         );
-      })
+      }).toList()
     );
   }
 
