@@ -1,5 +1,6 @@
 # Client build step
-FROM google/dart:2.8 as client_builder
+# FROM google/dart:2.8 as client_builder
+FROM isaacp/dart-arm:arm64 as client_builder
 WORKDIR /app/
 ADD client/pubspec.yaml .
 ADD client/pubspec.lock .
