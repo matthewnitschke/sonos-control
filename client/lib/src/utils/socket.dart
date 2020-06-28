@@ -1,4 +1,6 @@
 
+import 'dart:html';
+
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ServerSocket {
@@ -8,6 +10,7 @@ class ServerSocket {
   IO.Socket get socket => _socket;
   IO.Socket _socket;
   ServerSocket._internal() {
-    _socket = IO.io('http://localhost:3000');
+    final loc = window.location;
+    _socket = IO.io(loc.origin);
   }
 }
