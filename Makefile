@@ -6,3 +6,8 @@ build-client:
 
 serve-server:
 	(cd server && yarn start)
+
+
+release:
+	docker build -t matthewnitschke/sonos-control .
+	docker push matthewnitschke/sonos-control:latest
