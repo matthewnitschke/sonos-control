@@ -126,20 +126,20 @@ io.on('connection', (socket) => {
   })
 
   socket.on('sonos-library', async (resp) => {
-    // let playlists = await spotifyApi.getUserPlaylists()
+    let playlists = await spotifyApi.getUserPlaylists()
 
-    // playlists = playlists.body.items.map((playlist) => {
-    //   let parts = playlist.uri.split(':')
-    //   let id = parts[parts.length-1]
-    //   let correctedURI = `spotify:user:${spotifyUserId}:playlist:${id}`
+    playlists = playlists.body.items.map((playlist) => {
+      let parts = playlist.uri.split(':')
+      let id = parts[parts.length-1]
+      let correctedURI = `spotify:user:${spotifyUserId}:playlist:${id}`
 
-    //   return {
-    //     name: playlist.name,
-    //     uri: correctedURI
-    //   }
-    // })
+      return {
+        name: playlist.name,
+        uri: correctedURI
+      }
+    })
 
-    // resp(playlists);
+    resp(playlists);
   })
 });
 

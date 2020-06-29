@@ -7,3 +7,5 @@
 server-runner.sh
 
 client/build
+
+run-server.sh
