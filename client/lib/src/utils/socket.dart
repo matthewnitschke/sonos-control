@@ -11,6 +11,8 @@ class ServerSocket {
   IO.Socket _socket;
   ServerSocket._internal() {
     final loc = window.location;
-    _socket = IO.io(loc.origin);
+    final port = 3000;
+    final path = '${loc.protocol}//${loc.hostname}:${port}';
+    _socket = IO.io(path);
   }
 }
