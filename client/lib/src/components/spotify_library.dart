@@ -37,7 +37,7 @@ class SpotifyLibraryComponent extends UiComponent2<SpotifyLibraryProps> {
       props.playlists.map<ReactElement>((playlist) {
         return (Dom.div()
           ..key = playlist.name
-          ..className = 'playlist-item'
+          ..className = 'panel-list-item'
           ..onClick = ((_) => props.onPlaylistClick(playlist))
         )(playlist.name);
       }).toList()

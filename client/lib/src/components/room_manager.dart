@@ -39,6 +39,7 @@ class RoomManagerComponent extends UiComponent2<RoomManagerProps> {
       props.speakers.keys.map((speakerName) {
         return (Dom.div()
           ..key = speakerName
+          ..className = 'panel-list-item'
         )(
           (Dom.input()
             ..type = 'checkbox'
@@ -50,7 +51,7 @@ class RoomManagerComponent extends UiComponent2<RoomManagerProps> {
             ..htmlFor = speakerName
           )(speakerName),
         );
-      }).toList()
+      }).toList(),
     );
   }
 

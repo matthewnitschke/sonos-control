@@ -8,7 +8,11 @@ const io = require('socket.io')(http);
 
 const spotifyApi = require('./spotify_api.js')
 
-const { spotifyUserId } = require('./environment.js')
+const { 
+  spotifyUserId, 
+  spotifyClientSecret, 
+  spotifyClientId
+} = require('./environment.js')
 
 const { DeviceDiscovery, Listener } = require('sonos');
 
@@ -126,6 +130,15 @@ io.on('connection', (socket) => {
   })
 
   socket.on('sonos-library', async (resp) => {
+    if (
+      spotifyUserId == null || 
+      spotifyClientSecret == null ||
+      spotifyClientId == null
+    ) {
+      console.log('Spotify credentials not found')
+      return;
+    }
+
     let playlists = await spotifyApi.getUserPlaylists()
 
     playlists = playlists.body.items.map((playlist) => {

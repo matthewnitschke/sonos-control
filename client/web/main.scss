@@ -1,3 +1,5 @@
+@import "slider.scss";
+
 html, body, #app {
     margin: 0;
     padding: 0;
@@ -43,16 +45,17 @@ $background-color: #000;
 
         .track-name {
             color: #FFF;
-            font-size: 32px;
+            font-size: 50px;
         }
 
         .artist-name {
             color: grey;
-            font-size: 18px;
+            font-size: 30px;
         }
     }
 
     .playback-control {
+        font-size: 2rem;
         display: flex;
         color: #FFF;
         justify-content: space-around;
@@ -80,14 +83,13 @@ $background-color: #000;
             align-items: center;;
             color: #FFF;
             cursor: pointer;
-            line-height: 2;
         }
 
         & + label::before {
             content: '';
             display: inline-block;
-            margin-right: .3rem;
-            border: solid 2px #FFF;
+            margin-right: .7rem;
+            border: solid 3px #FFF;
             width: 1em;
             height: 1em;
         }
@@ -110,13 +112,12 @@ $background-color: #000;
     }
 
     .panel-trigger {
-        font-size: .6rem;
         display: flex;
         flex-direction: column;
         background-color: grey;
-        padding: .5rem;
+        padding: .7rem;
         i {
-            margin: .1rem 0;
+            margin: .2rem 0;
             color: #FFF;
         }
     }
@@ -124,8 +125,7 @@ $background-color: #000;
     .panel-content {
         height: 100%;
         background-color: grey;
-        padding: 1rem;
-        min-width: 18rem;
+        min-width: 28rem;
 
         overflow: auto;
     }
@@ -133,17 +133,28 @@ $background-color: #000;
     .panel-title {
         font-weight: bold;
         color: #FFF;
-        font-size: 24px;
+        font-size: 40px;
         margin: .7rem 0;
         text-transform: uppercase;
+        padding: 0 1rem;
     }
-}
 
-.spotify-library {
-
-    .playlist-item {
+    .panel-list-item {
+        font-size: 25px;
         color: #FFF;
-        margin-bottom: .5rem;
         cursor: pointer;
+        padding: .5rem 1rem;
+
+        &:hover {
+            background-color: #636363;
+        }
+    }
+
+    .panel-footer {
+        position: absolute;
+        bottom: 0;
+        color: #FFF;
+        padding: 1rem;
     }
 }
+
