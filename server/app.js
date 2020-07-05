@@ -11,12 +11,12 @@ const spotifyApi = require('./spotify_api.js')
 const { 
   spotifyUserId, 
   spotifyClientSecret, 
-  spotifyClientId
+  spotifyClientId,
+  mainDeviceName
 } = require('./environment.js')
 
 const { DeviceDiscovery, Listener } = require('sonos');
 
-const mainDeviceRoomName = 'Office'
 let mainDevice;
 let otherDevices = {};
 
@@ -26,7 +26,7 @@ let currentVolume;
 DeviceDiscovery((device) => {
   device.deviceDescription().then(desc => {
     console.log(`Device Found: ${desc.roomName}`);
-    if (desc.roomName == mainDeviceRoomName) {
+    if (desc.roomName == mainDeviceName) {
       console.log(`Found Main Device: ${desc.roomName}:${device.host}`)
       mainDevice = device
       Listener.subscribeTo(mainDevice)
@@ -68,14 +68,14 @@ Listener.on('ZoneGroupTopology', result => {
   data.forEach(group => {
       let isMain = false;
       group.ZoneGroupMember.forEach(zoneMember => {
-          if (zoneMember.ZoneName == mainDeviceRoomName) {
+          if (zoneMember.ZoneName == mainDeviceName) {
               isMain = true;
           }
       })
 
       group.ZoneGroupMember.forEach((zone) => {
           // we dont want to add the main device to the list of checkbox devices
-          if (zone.ZoneName != mainDeviceRoomName) {
+          if (zone.ZoneName != mainDeviceName) {
               newDevices[zone.ZoneName] = isMain
           }
       });
@@ -121,7 +121,7 @@ io.on('connection', (socket) => {
   socket.on('next', () => mainDevice.next())
   socket.on('previous', () => mainDevice.previous())
   socket.on('set-volume', (v) => mainDevice.setVolume(v))
-  socket.on('add-device-to-zone', (deviceName) => otherDevices[deviceName].joinGroup(mainDeviceRoomName))
+  socket.on('add-device-to-zone', (deviceName) => otherDevices[deviceName].joinGroup(mainDeviceName))
   socket.on('remove-device-from-zone', (deviceName) => otherDevices[deviceName].leaveGroup())
   socket.on('play-uri', (uri) => {
     mainDevice.flush()
