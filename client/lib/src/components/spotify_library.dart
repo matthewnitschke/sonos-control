@@ -31,7 +31,9 @@ class SpotifyLibraryComponent extends UiComponent2<SpotifyLibraryProps> {
       return (Dom.h3()
         ..className = 'panel-content'
       )(
-        'Spotify Not Authenticated. Please check env vars'
+        'Spotify Not Authenticated.',
+        Dom.br()(), 
+        'Please check env vars'
       );
     }
 
