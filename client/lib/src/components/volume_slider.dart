@@ -7,7 +7,7 @@ part 'volume_slider.over_react.g.dart';
 
 UiFactory<VolumeSliderProps> VolumeSlider = connect<SonosControlState, VolumeSliderProps>(
   mapStateToProps: (state) => (VolumeSlider()
-    ..currentVolume = state.volume
+    ..currentVolume = state.playState.volume
   ),
   mapDispatchToProps: (dispatch) => (VolumeSlider()
     ..onVolumeChange = ((newVolume) => dispatch(SetVolumeAction(newVolume)))

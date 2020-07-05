@@ -2,7 +2,6 @@ import 'package:built_collection/built_collection.dart';
 import 'package:over_react/over_react.dart';
 import 'package:over_react/over_react_redux.dart';
 import 'package:sonos_control_dart/src/models/sonos_control_state.sg.dart';
-import 'package:sonos_control_dart/src/models/speaker.sg.dart';
 import 'package:sonos_control_dart/src/redux/sonos_control_actions.dart';
 
 part 'room_manager.over_react.g.dart';

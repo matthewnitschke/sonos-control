@@ -6,8 +6,8 @@ part 'current_track_info.over_react.g.dart';
 
 UiFactory<CurrentTrackInfoProps> CurrentTrackInfo = connect<SonosControlState, CurrentTrackInfoProps>(
   mapStateToProps: (state) => (CurrentTrackInfo()
-    ..currentTrackName = state.currentTrackName
-    ..currentArtistName = state.currentArtistName
+    ..currentTrackName = state.playState.currentTrackName
+    ..currentArtistName = state.playState.currentArtistName
   ),
 )(_$CurrentTrackInfo); // ignore: undefined_identifier
 

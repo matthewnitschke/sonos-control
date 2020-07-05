@@ -6,7 +6,7 @@ part 'current_track_album_artwork.over_react.g.dart';
 
 UiFactory<CurrentTrackAlbumArtworkProps> CurrentTrackAlbumArtwork = connect<SonosControlState, CurrentTrackAlbumArtworkProps>(
   mapStateToProps: (state) => (CurrentTrackAlbumArtwork()
-    ..currentAlbumArtworkUrl = state.currentAlbumArtworkUrl
+    ..currentAlbumArtworkUrl = state.playState.currentAlbumArtworkUrl
   ),
 )(_$CurrentTrackAlbumArtwork); // ignore: undefined_identifier
 

@@ -13,14 +13,9 @@ import 'package:sonos_control_dart/src/models/sonos_control_state.sg.dart';
 
 part 'app.over_react.g.dart';
 
-UiFactory<AppProps> App = connect<SonosControlState, AppProps>(
-  mapStateToProps: (state) => (App()..isPlaying = state.isPlaying),
-  mapDispatchToProps: (dispatch) => (App()),
-)(_$App); // ignore: undefined_identifier
+UiFactory<AppProps> App = _$App; // ignore: undefined_identifier
 
-mixin AppProps on UiProps {
-  bool isPlaying;
-}
+mixin AppProps on UiProps {}
 
 class AppComponent extends UiComponent2<AppProps> {
   @override

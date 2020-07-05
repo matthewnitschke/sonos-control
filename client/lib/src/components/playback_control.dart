@@ -7,7 +7,7 @@ part 'playback_control.over_react.g.dart';
 
 UiFactory<PlaybackControlProps> PlaybackControl = connect<SonosControlState, PlaybackControlProps>(
   mapStateToProps: (state) => (PlaybackControl()
-    ..isPlaying = state.isPlaying
+    ..isPlaying = state.playState.isPlaying
   ),
   mapDispatchToProps: (dispatch) => (PlaybackControl()
     ..onPlayPauseButtonClick = ((isPlaying) => dispatch(SetPlayStateAction(isPlaying)))

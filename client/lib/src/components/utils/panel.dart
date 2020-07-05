@@ -1,6 +1,6 @@
 import 'package:over_react/over_react.dart';
 
-part 'panel.over_react.g.dart';
+part 'panel.over_react.g.dart'; // ignore: uri_has_not_been_generated
 
 UiFactory<PanelProps> Panel = _$Panel; // ignore: undefined_identifier
 

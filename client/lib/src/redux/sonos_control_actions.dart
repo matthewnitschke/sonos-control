@@ -1,7 +1,6 @@
 
 import 'package:built_collection/built_collection.dart';
 import 'package:sonos_control_dart/src/models/playlist.sg.dart';
-import 'package:sonos_control_dart/src/models/speaker.sg.dart';
 
 class ServerSyncedAction {
   /// Whether or not to send the update command to the server, used 
@@ -56,6 +55,11 @@ class SetPlaylistsAction {
   BuiltList<Playlist> playlists;
 
   SetPlaylistsAction(this.playlists);
+}
+
+class SetSpotifyAuthStateAction {
+  bool hasAuth;
+  SetSpotifyAuthStateAction(this.hasAuth);
 }
 
 class SetSpeakersAction {

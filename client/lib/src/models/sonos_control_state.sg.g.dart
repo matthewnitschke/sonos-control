@@ -8,17 +8,9 @@ part of 'sonos_control_state.sg.dart';
 
 class _$SonosControlState extends SonosControlState {
   @override
-  final bool isPlaying;
+  final PlayState playState;
   @override
-  final int volume;
-  @override
-  final String currentTrackName;
-  @override
-  final String currentArtistName;
-  @override
-  final String currentAlbumArtworkUrl;
-  @override
-  final BuiltList<Playlist> playlists;
+  final MusicLibrary musicLibrary;
   @override
   final BuiltMap<String, bool> speakers;
 
@@ -26,35 +18,13 @@ class _$SonosControlState extends SonosControlState {
           [void Function(SonosControlStateBuilder) updates]) =>
       (new SonosControlStateBuilder()..update(updates)).build();
 
-  _$SonosControlState._(
-      {this.isPlaying,
-      this.volume,
-      this.currentTrackName,
-      this.currentArtistName,
-      this.currentAlbumArtworkUrl,
-      this.playlists,
-      this.speakers})
+  _$SonosControlState._({this.playState, this.musicLibrary, this.speakers})
       : super._() {
-    if (isPlaying == null) {
-      throw new BuiltValueNullFieldError('SonosControlState', 'isPlaying');
+    if (playState == null) {
+      throw new BuiltValueNullFieldError('SonosControlState', 'playState');
     }
-    if (volume == null) {
-      throw new BuiltValueNullFieldError('SonosControlState', 'volume');
-    }
-    if (currentTrackName == null) {
-      throw new BuiltValueNullFieldError(
-          'SonosControlState', 'currentTrackName');
-    }
-    if (currentArtistName == null) {
-      throw new BuiltValueNullFieldError(
-          'SonosControlState', 'currentArtistName');
-    }
-    if (currentAlbumArtworkUrl == null) {
-      throw new BuiltValueNullFieldError(
-          'SonosControlState', 'currentAlbumArtworkUrl');
-    }
-    if (playlists == null) {
-      throw new BuiltValueNullFieldError('SonosControlState', 'playlists');
+    if (musicLibrary == null) {
+      throw new BuiltValueNullFieldError('SonosControlState', 'musicLibrary');
     }
     if (speakers == null) {
       throw new BuiltValueNullFieldError('SonosControlState', 'speakers');
@@ -73,38 +43,22 @@ class _$SonosControlState extends SonosControlState {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is SonosControlState &&
-        isPlaying == other.isPlaying &&
-        volume == other.volume &&
-        currentTrackName == other.currentTrackName &&
-        currentArtistName == other.currentArtistName &&
-        currentAlbumArtworkUrl == other.currentAlbumArtworkUrl &&
-        playlists == other.playlists &&
+        playState == other.playState &&
+        musicLibrary == other.musicLibrary &&
         speakers == other.speakers;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc($jc($jc(0, isPlaying.hashCode), volume.hashCode),
-                        currentTrackName.hashCode),
-                    currentArtistName.hashCode),
-                currentAlbumArtworkUrl.hashCode),
-            playlists.hashCode),
+    return $jf($jc($jc($jc(0, playState.hashCode), musicLibrary.hashCode),
         speakers.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('SonosControlState')
-          ..add('isPlaying', isPlaying)
-          ..add('volume', volume)
-          ..add('currentTrackName', currentTrackName)
-          ..add('currentArtistName', currentArtistName)
-          ..add('currentAlbumArtworkUrl', currentAlbumArtworkUrl)
-          ..add('playlists', playlists)
+          ..add('playState', playState)
+          ..add('musicLibrary', musicLibrary)
           ..add('speakers', speakers))
         .toString();
   }
@@ -114,34 +68,16 @@ class SonosControlStateBuilder
     implements Builder<SonosControlState, SonosControlStateBuilder> {
   _$SonosControlState _$v;
 
-  bool _isPlaying;
-  bool get isPlaying => _$this._isPlaying;
-  set isPlaying(bool isPlaying) => _$this._isPlaying = isPlaying;
+  PlayStateBuilder _playState;
+  PlayStateBuilder get playState =>
+      _$this._playState ??= new PlayStateBuilder();
+  set playState(PlayStateBuilder playState) => _$this._playState = playState;
 
-  int _volume;
-  int get volume => _$this._volume;
-  set volume(int volume) => _$this._volume = volume;
-
-  String _currentTrackName;
-  String get currentTrackName => _$this._currentTrackName;
-  set currentTrackName(String currentTrackName) =>
-      _$this._currentTrackName = currentTrackName;
-
-  String _currentArtistName;
-  String get currentArtistName => _$this._currentArtistName;
-  set currentArtistName(String currentArtistName) =>
-      _$this._currentArtistName = currentArtistName;
-
-  String _currentAlbumArtworkUrl;
-  String get currentAlbumArtworkUrl => _$this._currentAlbumArtworkUrl;
-  set currentAlbumArtworkUrl(String currentAlbumArtworkUrl) =>
-      _$this._currentAlbumArtworkUrl = currentAlbumArtworkUrl;
-
-  ListBuilder<Playlist> _playlists;
-  ListBuilder<Playlist> get playlists =>
-      _$this._playlists ??= new ListBuilder<Playlist>();
-  set playlists(ListBuilder<Playlist> playlists) =>
-      _$this._playlists = playlists;
+  MusicLibraryBuilder _musicLibrary;
+  MusicLibraryBuilder get musicLibrary =>
+      _$this._musicLibrary ??= new MusicLibraryBuilder();
+  set musicLibrary(MusicLibraryBuilder musicLibrary) =>
+      _$this._musicLibrary = musicLibrary;
 
   MapBuilder<String, bool> _speakers;
   MapBuilder<String, bool> get speakers =>
@@ -153,12 +89,8 @@ class SonosControlStateBuilder
 
   SonosControlStateBuilder get _$this {
     if (_$v != null) {
-      _isPlaying = _$v.isPlaying;
-      _volume = _$v.volume;
-      _currentTrackName = _$v.currentTrackName;
-      _currentArtistName = _$v.currentArtistName;
-      _currentAlbumArtworkUrl = _$v.currentAlbumArtworkUrl;
-      _playlists = _$v.playlists?.toBuilder();
+      _playState = _$v.playState?.toBuilder();
+      _musicLibrary = _$v.musicLibrary?.toBuilder();
       _speakers = _$v.speakers?.toBuilder();
       _$v = null;
     }
@@ -184,18 +116,16 @@ class SonosControlStateBuilder
     try {
       _$result = _$v ??
           new _$SonosControlState._(
-              isPlaying: isPlaying,
-              volume: volume,
-              currentTrackName: currentTrackName,
-              currentArtistName: currentArtistName,
-              currentAlbumArtworkUrl: currentAlbumArtworkUrl,
-              playlists: playlists.build(),
+              playState: playState.build(),
+              musicLibrary: musicLibrary.build(),
               speakers: speakers.build());
     } catch (_) {
       String _$failedField;
       try {
-        _$failedField = 'playlists';
-        playlists.build();
+        _$failedField = 'playState';
+        playState.build();
+        _$failedField = 'musicLibrary';
+        musicLibrary.build();
         _$failedField = 'speakers';
         speakers.build();
       } catch (e) {

@@ -18,9 +18,16 @@ class MusicLibraryAPI {
   Future<void> _getMusicLibrary() async {
     final socket = ServerSocket().socket;
 
-    socket.emitWithAck('sonos-library', null, ack: (items) {
+    socket.emitWithAck('sonos-library', null, ack: (response) {
+      if (!(response["isAuthenticated"] as bool)) {
+        _store.dispatch(SetSpotifyAuthStateAction(false));
+        return;
+      }
+
+      final playlists = response.playlists;
+
       final builtItems = BuiltList<Playlist>(
-        items.map((item) {
+        playlists.map((item) {
           return Playlist((b) => b
             ..name = item['name'] as String
             ..uri = item['uri'] as String

@@ -9,7 +9,8 @@ part 'spotify_library.over_react.g.dart';
 
 UiFactory<SpotifyLibraryProps> SpotifyLibrary = connect<SonosControlState, SpotifyLibraryProps>(
   mapStateToProps: (state) => (SpotifyLibrary()
-    ..playlists = state.playlists
+    ..isAuthed = state.musicLibrary.isSpotifyAuthed
+    ..playlists = state.musicLibrary.playlists
   ),
   mapDispatchToProps: (dispatch) => (SpotifyLibrary()
     ..onPlaylistClick = ((playlist) => dispatch(PlayURIAction(playlist.uri)))
@@ -17,6 +18,7 @@ UiFactory<SpotifyLibraryProps> SpotifyLibrary = connect<SonosControlState, Spoti
 )(_$SpotifyLibrary); // ignore: undefined_identifier
 
 mixin SpotifyLibraryProps on UiProps {
+  bool isAuthed;
   BuiltList<Playlist> playlists;
 
   void Function(Playlist) onPlaylistClick;
@@ -24,10 +26,15 @@ mixin SpotifyLibraryProps on UiProps {
 
 class SpotifyLibraryComponent extends UiComponent2<SpotifyLibraryProps> {
   @override
-  Map get defaultProps => (newProps());
-
-  @override
   ReactElement render() {
+    if (!props.isAuthed) {
+      return (Dom.h3()
+        ..className = 'panel-content'
+      )(
+        'Spotify Not Authenticated. Please check env vars'
+      );
+    }
+
     return (Dom.div()
       ..className = 'spotify-library'
     )(

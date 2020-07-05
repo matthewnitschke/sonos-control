@@ -25,7 +25,7 @@ let currentTrack;
 let currentVolume;
 DeviceDiscovery((device) => {
   device.deviceDescription().then(desc => {
-    console.log(`Device Found: ${desc.roomName}`);
+    console.log(`Device Found: ${desc.roomName} ${desc.roomName == mainDeviceName ? '(Using as main device)' : ''}`);
     if (desc.roomName == mainDeviceName) {
       console.log(`Found Main Device: ${desc.roomName}:${device.host}`)
       mainDevice = device
@@ -136,7 +136,9 @@ io.on('connection', (socket) => {
       spotifyClientId == null
     ) {
       console.log('Spotify credentials not found')
-      return;
+      resp({
+        isAuthenticated: false
+      })
     }
 
     let playlists = await spotifyApi.getUserPlaylists()
@@ -152,7 +154,10 @@ io.on('connection', (socket) => {
       }
     })
 
-    resp(playlists);
+    resp({
+      isAuthenticated: true,
+      playlists
+    });
   })
 });
 

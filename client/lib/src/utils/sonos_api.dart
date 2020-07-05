@@ -4,7 +4,6 @@ import 'package:built_collection/built_collection.dart';
 import 'package:redux/redux.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:sonos_control_dart/src/models/sonos_control_state.sg.dart';
-import 'package:sonos_control_dart/src/models/speaker.sg.dart';
 import 'package:sonos_control_dart/src/redux/sonos_control_actions.dart';
 import 'package:sonos_control_dart/src/utils/socket.dart';
 
