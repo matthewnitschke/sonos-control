@@ -5,6 +5,20 @@ Dedicated media controls for sonos
 
 ![image](https://user-images.githubusercontent.com/6363089/85253126-bbbb8700-b41a-11ea-9431-138c373e7fb0.png)
 
+## Usage
+Sonos-control is designed to be run on a docker server and raspberry pi touch screen client
+
+### Server Installation
+
+```
+docker run \
+   -p 3000:3000 \
+   --net="host" \
+   --env MAIN_DEVICE_NAME=Office \ # the name of your sonos room
+   matthewnitschke/sonos-control 
+```
+
+
 
 ## Env
 - `SPOTIFY_CLIENT_ID` - spotify api client id
