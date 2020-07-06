@@ -1,3 +1,4 @@
+![Release](https://github.com/matthewnitschke/sonos-control/workflows/Release/badge.svg)
 # sonos-control
 Dedicated media controls for sonos
 
