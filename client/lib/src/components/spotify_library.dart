@@ -7,6 +7,13 @@ import 'package:sonos_control_dart/src/redux/sonos_control_actions.dart';
 
 part 'spotify_library.over_react.g.dart';
 
+mixin SpotifyLibraryProps on UiProps {
+  bool isAuthed;
+  BuiltList<Playlist> playlists;
+
+  void Function(Playlist) onPlaylistClick;
+}
+
 UiFactory<SpotifyLibraryProps> SpotifyLibrary = connect<SonosControlState, SpotifyLibraryProps>(
   mapStateToProps: (state) => (SpotifyLibrary()
     ..isAuthed = state.musicLibrary.isSpotifyAuthed
@@ -15,18 +22,8 @@ UiFactory<SpotifyLibraryProps> SpotifyLibrary = connect<SonosControlState, Spoti
   mapDispatchToProps: (dispatch) => (SpotifyLibrary()
     ..onPlaylistClick = ((playlist) => dispatch(PlayURIAction(playlist.uri)))
   ),
-)(_$SpotifyLibrary); // ignore: undefined_identifier
-
-mixin SpotifyLibraryProps on UiProps {
-  bool isAuthed;
-  BuiltList<Playlist> playlists;
-
-  void Function(Playlist) onPlaylistClick;
-}
-
-class SpotifyLibraryComponent extends UiComponent2<SpotifyLibraryProps> {
-  @override
-  ReactElement render() {
+)(
+  uiFunction((props) {
     if (!props.isAuthed) {
       return (Dom.h3()
         ..className = 'panel-content'
@@ -51,5 +48,5 @@ class SpotifyLibraryComponent extends UiComponent2<SpotifyLibraryProps> {
         )(playlist.name);
       }).toList()
     );
-  }
-}
+  }, $SpotifyLibraryConfig, // ignore: undefined_identifier, argument_type_not_assignable
+));

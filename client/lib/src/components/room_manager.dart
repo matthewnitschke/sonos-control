@@ -6,6 +6,13 @@ import 'package:sonos_control_dart/src/redux/sonos_control_actions.dart';
 
 part 'room_manager.over_react.g.dart';
 
+mixin RoomManagerProps on UiProps {
+  BuiltMap<String, bool> speakers;
+
+  void Function(String deviceName) addDevice;
+  void Function(String deviceName) removeDevice;
+}
+
 UiFactory<RoomManagerProps> RoomManager = connect<SonosControlState, RoomManagerProps>(
   mapStateToProps: (state) => (RoomManager()
     ..speakers = state.speakers
@@ -14,21 +21,18 @@ UiFactory<RoomManagerProps> RoomManager = connect<SonosControlState, RoomManager
     ..addDevice = ((name) => dispatch(AddDeviceToZoneAction(name)))
     ..removeDevice = ((name) => dispatch(RemoveDeviceFromZoneAction(name)))
   ),
-)(_$RoomManager); // ignore: undefined_identifier
+)(
+  uiFunction((props) {
+    void _handleCheckboxChange(SyntheticFormEvent e, String speakerName) {
+      final isChecked = e.target.checked as bool;
 
-mixin RoomManagerProps on UiProps {
-  BuiltMap<String, bool> speakers;
+      if (isChecked) {
+        props.addDevice(speakerName);
+      } else {
+        props.removeDevice(speakerName);
+      }
+    }
 
-  void Function(String deviceName) addDevice;
-  void Function(String deviceName) removeDevice;
-}
-
-class RoomManagerComponent extends UiComponent2<RoomManagerProps> {
-  @override
-  Map get defaultProps => (newProps());
-
-  @override
-  ReactElement render() {
     return (Dom.div()
       ..className = 'devices-panel'
     )(
@@ -52,15 +56,5 @@ class RoomManagerComponent extends UiComponent2<RoomManagerProps> {
         );
       }).toList(),
     );
-  }
-
-  void _handleCheckboxChange(SyntheticFormEvent e, String speakerName) {
-    final isChecked = e.target.checked as bool;
-
-    if (isChecked) {
-      props.addDevice(speakerName);
-    } else {
-      props.removeDevice(speakerName);
-    }
-  }
-}
+  }, $RoomManagerConfig, // ignore: undefined_identifier, argument_type_not_assignable
+));

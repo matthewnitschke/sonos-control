@@ -5,17 +5,6 @@ import 'package:sonos_control_dart/src/redux/sonos_control_actions.dart';
 
 part 'playback_control.over_react.g.dart';
 
-UiFactory<PlaybackControlProps> PlaybackControl = connect<SonosControlState, PlaybackControlProps>(
-  mapStateToProps: (state) => (PlaybackControl()
-    ..isPlaying = state.playState.isPlaying
-  ),
-  mapDispatchToProps: (dispatch) => (PlaybackControl()
-    ..onPlayPauseButtonClick = ((isPlaying) => dispatch(SetPlayStateAction(isPlaying)))
-    ..onNextButtonClick = (() => dispatch(NextTrackAction()))
-    ..onPreviousButtonClick = (() => dispatch(NextTrackAction()))
-  ),
-)(_$PlaybackControl); // ignore: undefined_identifier
-
 mixin PlaybackControlProps on UiProps {
   bool isPlaying;
 
@@ -25,12 +14,32 @@ mixin PlaybackControlProps on UiProps {
   void Function() onPreviousButtonClick;
 }
 
-class PlaybackControlComponent extends UiComponent2<PlaybackControlProps> {
-  @override
-  Map get defaultProps => (newProps());
+UiFactory<PlaybackControlProps> PlaybackControl = connect<SonosControlState, PlaybackControlProps>(
+  mapStateToProps: (state) => (PlaybackControl()
+    ..isPlaying = state.playState.isPlaying
+  ),
+  mapDispatchToProps: (dispatch) => (PlaybackControl()
+    ..onPlayPauseButtonClick = ((isPlaying) => dispatch(SetPlayStateAction(isPlaying)))
+    ..onNextButtonClick = (() => dispatch(NextTrackAction()))
+    ..onPreviousButtonClick = (() => dispatch(NextTrackAction()))
+  ),
+)(
+  uiFunction((props) {
 
-  @override
-  ReactElement render() {
+    ReactElement _renderPlayPauseButton() {
+      if (props.isPlaying) {
+        return (Dom.i()
+          ..className='fas fa-pause fa-3x'
+          ..onClick = ((_) => props.onPlayPauseButtonClick(false))
+        )();
+      }
+
+      return (Dom.i()
+        ..className='fas fa-play fa-3x'
+        ..onClick = ((_) => props.onPlayPauseButtonClick(true))
+      )();
+    }
+
     return (Dom.div()
       ..className = 'playback-control'
     )(
@@ -44,20 +53,5 @@ class PlaybackControlComponent extends UiComponent2<PlaybackControlProps> {
         ..onClick = ((_) => props.onPreviousButtonClick())
       )(),
     );
-  }
-
-
-  ReactElement _renderPlayPauseButton(){
-    if (props.isPlaying) {
-      return (Dom.i()
-        ..className='fas fa-pause fa-3x'
-        ..onClick = ((_) => props.onPlayPauseButtonClick(false))
-      )();
-    }
-
-    return (Dom.i()
-      ..className='fas fa-play fa-3x'
-      ..onClick = ((_) => props.onPlayPauseButtonClick(true))
-    )();
-  }
-}
+  }, $PlaybackControlConfig, // ignore: undefined_identifier, argument_type_not_assignable
+));

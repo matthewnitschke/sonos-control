@@ -4,24 +4,18 @@ import 'package:sonos_control_dart/src/models/sonos_control_state.sg.dart';
 
 part 'current_track_info.over_react.g.dart';
 
-UiFactory<CurrentTrackInfoProps> CurrentTrackInfo = connect<SonosControlState, CurrentTrackInfoProps>(
-  mapStateToProps: (state) => (CurrentTrackInfo()
-    ..currentTrackName = state.playState.currentTrackName
-    ..currentArtistName = state.playState.currentArtistName
-  ),
-)(_$CurrentTrackInfo); // ignore: undefined_identifier
-
 mixin CurrentTrackInfoProps on UiProps {
   String currentTrackName;
   String currentArtistName;
 }
 
-class CurrentTrackInfoComponent extends UiComponent2<CurrentTrackInfoProps> {
-  @override
-  Map get defaultProps => (newProps());
-
-  @override
-  ReactElement render() {
+UiFactory<CurrentTrackInfoProps> CurrentTrackInfo = connect<SonosControlState, CurrentTrackInfoProps>(
+  mapStateToProps: (state) => (CurrentTrackInfo()
+    ..currentTrackName = state.playState.currentTrackName
+    ..currentArtistName = state.playState.currentArtistName
+  ),
+)(
+  uiFunction((props) {
     return (Dom.div()
       ..className = 'current-track__desc'
     )(
@@ -32,5 +26,5 @@ class CurrentTrackInfoComponent extends UiComponent2<CurrentTrackInfoProps> {
         ..className = 'artist-name'
       )(props.currentArtistName),
     );
-  }
-}
+  }, $CurrentTrackInfoConfig, // ignore: undefined_identifier, argument_type_not_assignable
+));

@@ -5,6 +5,11 @@ import 'package:sonos_control_dart/src/redux/sonos_control_actions.dart';
 
 part 'volume_slider.over_react.g.dart';
 
+mixin VolumeSliderProps on UiProps {
+  int currentVolume;
+  void Function(int) onVolumeChange;
+}
+
 UiFactory<VolumeSliderProps> VolumeSlider = connect<SonosControlState, VolumeSliderProps>(
   mapStateToProps: (state) => (VolumeSlider()
     ..currentVolume = state.playState.volume
@@ -12,19 +17,13 @@ UiFactory<VolumeSliderProps> VolumeSlider = connect<SonosControlState, VolumeSli
   mapDispatchToProps: (dispatch) => (VolumeSlider()
     ..onVolumeChange = ((newVolume) => dispatch(SetVolumeAction(newVolume)))
   ),
-)(_$VolumeSlider); // ignore: undefined_identifier
+)(
+  uiFunction((props) {
+     void _handleRangeChange(SyntheticFormEvent event) {
+      int newVolume = int.parse(event.target.value);
+      props.onVolumeChange(newVolume);
+    }
 
-mixin VolumeSliderProps on UiProps {
-  int currentVolume;
-  void Function(int) onVolumeChange;
-}
-
-class VolumeSliderComponent extends UiComponent2<VolumeSliderProps> {
-  @override
-  Map get defaultProps => (newProps());
-
-  @override
-  ReactElement render() {
     return (Dom.div()
       ..className = 'volume-slider'
     )(
@@ -36,11 +35,5 @@ class VolumeSliderComponent extends UiComponent2<VolumeSliderProps> {
         ..onChange = _handleRangeChange
       )()
     );
-  }
-
-  void _handleRangeChange(SyntheticFormEvent event) {
-    int newVolume = int.parse(event.target.value);
-
-    props.onVolumeChange(newVolume);
-  }
-}
+  }, $VolumeSliderConfig, // ignore: undefined_identifier, argument_type_not_assignable
+));

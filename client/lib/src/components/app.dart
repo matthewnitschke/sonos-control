@@ -11,51 +11,46 @@ import 'package:sonos_control_dart/src/components/volume_slider.dart';
 
 part 'app.over_react.g.dart';
 
-UiFactory<AppProps> App = _$App; // ignore: undefined_identifier
-
 mixin AppProps on UiProps {}
 
-class AppComponent extends UiComponent2<AppProps> {
-  @override
-  Map get defaultProps => (newProps());
-
-  @override
-  ReactElement render() {
-    return (Dom.div()
-      ..className = 'main-container'
-    )(
-      (Panel()
-        ..position = 'left'
+UiFactory<AppProps> App = uiFunction(
+    (props) {
+      return (Dom.div()
+        ..className = 'main-container'
       )(
-        RoomManager()(),
+        (Panel()
+          ..position = 'left'
+        )(
+          RoomManager()(),
+
+          (Dom.div()
+            ..className = 'panel-footer'
+          )(
+            (Dom.i()
+              ..className = 'fas fa-2x fa-sync-alt'
+              ..onClick = ((_) {
+                window.location.reload();
+              })
+            )()
+          )
+        ),
+
+        CurrentTrackAlbumArtwork()(),
 
         (Dom.div()
-          ..className = 'panel-footer'
+          ..className = 'right-panel'
         )(
-          (Dom.i()
-            ..className = 'fas fa-2x fa-sync-alt'
-            ..onClick = ((_) {
-              window.location.reload();
-            })
-          )()
-        )
-      ),
+          CurrentTrackInfo()(),
+          PlaybackControl()(),
+          VolumeSlider()(),
+        ),
 
-      CurrentTrackAlbumArtwork()(),
-
-      (Dom.div()
-        ..className = 'right-panel'
-      )(
-        CurrentTrackInfo()(),
-        PlaybackControl()(),
-        VolumeSlider()(),
-      ),
-
-      (Panel()
-        ..position = 'right'
-      )(
-        SpotifyLibrary()()
-      ),
-    );
-  }
-}
+        (Panel()
+          ..position = 'right'
+        )(
+          SpotifyLibrary()()
+        ),
+      );
+    }, 
+    $AppConfig, // ignore: undefined_identifier, argument_type_not_assignable
+);
