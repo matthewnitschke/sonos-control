@@ -2,49 +2,37 @@ import 'package:over_react/over_react.dart';
 
 part 'panel.over_react.g.dart'; // ignore: uri_has_not_been_generated
 
-UiFactory<PanelProps> Panel = _$Panel; // ignore: undefined_identifier
-
 mixin PanelProps on UiProps {
   String position;
 }
 
-mixin PanelState on UiState {
-  bool isExpanded;
-}
+UiFactory<PanelProps> Panel = uiFunction(
+    (props) {
+      final isExpanded = useState(false);
 
-class PanelComponent extends UiStatefulComponent2<PanelProps, PanelState> {
-  @override
-  get defaultProps => (newProps());
+      ReactElement _renderPanelTrigger() {
+        return (Dom.div()
+          ..className = 'panel-trigger'
+          ..onClick = ((_) => isExpanded.setWithUpdater((prev) => !prev))
+        )(
+          (Dom.i()..className='fas fa-circle')(),
+          (Dom.i()..className='fas fa-circle')(),
+          (Dom.i()..className='fas fa-circle')(),
+        );
+      }
 
-  @override
-  get initialState => (newState()
-    ..isExpanded = false
-  );
+      return (Dom.div()
+        ..className = 'panel panel-${props.position}'
+      )(
+        props.position == 'right' ? _renderPanelTrigger() : null,
 
-  @override
-  render() {
-    return (Dom.div()
-      ..className = 'panel panel-${props.position}'
-    )(
-      props.position == 'right' ? _renderPanelTrigger() : null,
+        (Dom.div()
+          ..className='panel-content'
+          ..style = {'display': isExpanded.value ? 'initial' : 'none'}
+        )(props.children),
 
-      (Dom.div()
-        ..className='panel-content'
-        ..style = {'display': state.isExpanded ? 'initial' : 'none'}
-      )(props.children),
-
-      props.position == 'left' ? _renderPanelTrigger() : null
-    );
-  }
-
-  ReactElement _renderPanelTrigger() {
-    return (Dom.div()
-      ..className = 'panel-trigger'
-      ..onClick = ((_) => setState(newState()..isExpanded = !state.isExpanded))
-    )(
-      (Dom.i()..className='fas fa-circle')(),
-      (Dom.i()..className='fas fa-circle')(),
-      (Dom.i()..className='fas fa-circle')(),
-    );
-  }
-}
+        props.position == 'left' ? _renderPanelTrigger() : null
+      );
+    }, 
+    $PanelConfig, // ignore: undefined_identifier, argument_type_not_assignable
+);
