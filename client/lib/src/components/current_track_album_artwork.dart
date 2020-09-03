@@ -9,7 +9,9 @@ mixin CurrentTrackAlbumArtworkProps on UiProps {
 }
 
 UiFactory<CurrentTrackAlbumArtworkProps> CurrentTrackAlbumArtwork = connect<SonosControlState, CurrentTrackAlbumArtworkProps>(
-  mapStateToProps: (state) => (CurrentTrackAlbumArtwork()),
+  mapStateToProps: (state) => (CurrentTrackAlbumArtwork()
+    ..currentAlbumArtworkUrl = state.playState.currentAlbumArtworkUrl
+  ),
   mapDispatchToProps: (dispatch) => (CurrentTrackAlbumArtwork()),
 )(
   uiFunction((props) {

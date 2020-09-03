@@ -104,10 +104,11 @@ io.on('connection', (socket) => {
   // give the frontend a bit to catch up before emitting updates
   setTimeout(() => {
     console.log('Emitting Updates')
-    socket.emit('topology-change', currentTopology)
-    socket.emit('play-state-change', currentState)
-    socket.emit('current-track-change', currentTrack)
-    socket.emit('volume-change', currentVolume)
+
+    currentTopology != null ? socket.emit('topology-change', currentTopology) : null;
+    currentState != null ? socket.emit('play-state-change', currentState) : null;
+    currentTrack != null ? socket.emit('current-track-change', currentTrack) : null;
+    currentVolume != null ? socket.emit('volume-change', currentVolume) : null;
   }, 1000)
 
   socket.on('setIsPlaying', (isPlaying) => {
@@ -139,6 +140,7 @@ io.on('connection', (socket) => {
       resp({
         isAuthenticated: false
       })
+      return;
     }
 
     let playlists = await spotifyApi.getUserPlaylists()

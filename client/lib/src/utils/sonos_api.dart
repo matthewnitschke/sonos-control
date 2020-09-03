@@ -53,16 +53,23 @@ class SonosEventAPI {
     });
 
     socket.on('current-track-change', (res) {
-      final data = res as Map<String, dynamic>;
+      if (res == null) {
+        // no track is currently selected or running 
+        // TODO: react to this somehow letting the frontend know
+      } else {
+        final data = res as Map<String, dynamic>;
+        _store.dispatch(SetCurrentTrackAction(
+          currentTrackName: data['title'] as String,
+          currentArtistName: data['artist'] as String,
+          currentAlbumArtworkUrl: data['albumArtURI'] as String,
+        ));
+      }
 
-      _store.dispatch(SetCurrentTrackAction(
-        currentTrackName: data['title'] as String,
-        currentArtistName: data['artist'] as String,
-        currentAlbumArtworkUrl: data['albumArtURI'] as String,
-      ));
     });
 
     socket.on('topology-change', (res) {
+      if (res == null) return;
+
       print("INP: $_topoPacketTracker");
       if (_topoPacketTracker <= 0) {
         final speakers = BuiltMap<String, bool>(res);
