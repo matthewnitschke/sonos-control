@@ -5,8 +5,10 @@ const { spotifyClientId, spotifyClientSecret, spotifyUserId } = require('../envi
 const express = require("express");
 const router = express.Router();
 
-const ipAddress = require('../utils.js').getServerAddress()
-const redirect_uri = `http://${ipAddress}:3000/spotify/auth-redirect`;
+const serverAddress = require('../utils.js').getServerAddress()
+const redirect_uri = `http://${serverAddress}:3000/spotify/auth-redirect`;
+
+console.log(`Spotify redirect_uri: ${redirect_uri}`);
 
 const spotifyApi = new SpotifyWebApi({
   clientId: spotifyClientId,
