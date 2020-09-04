@@ -24,10 +24,9 @@ UiFactory<SpotifyLibraryProps> SpotifyLibrary = connect<SonosControlState, Spoti
   ),
 )(
   uiFunction((props) {
-    return 'Not Authed';
     if (!props.isAuthed) {
       return (Dom.h3()
-        ..className = 'panel-content'
+        ..className = 'panel-content tac'
       )(
         'Spotify Not Authenticated.',
         Dom.br()(), 

@@ -93,10 +93,12 @@ Listener.on('ZoneGroupTopology', result => {
 // })
 
 app.use(express.static('web'))
+
+app.use('/spotify', require('./controllers/spotify.js'))
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname + '/web/index.html'));
 })
-
 
 io.on('connection', (socket) => {
   console.log('a user connected');
