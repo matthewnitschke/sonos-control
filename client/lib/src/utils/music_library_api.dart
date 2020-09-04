@@ -19,12 +19,13 @@ class MusicLibraryAPI {
     final socket = ServerSocket().socket;
 
     socket.emitWithAck('sonos-library', null, ack: (response) {
-      if (!(response["isAuthenticated"] as bool)) {
+
+      if (response["error"] != null) {
         _store.dispatch(SetSpotifyAuthStateAction(false));
         return;
       }
 
-      final playlists = response.playlists;
+      final playlists = response["data"];
 
       final builtItems = BuiltList<Playlist>(
         playlists.map((item) {

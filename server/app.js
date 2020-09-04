@@ -6,16 +6,9 @@ const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
-const spotifyApi = require('./spotify_api.js')
-
-const { 
-  spotifyUserId, 
-  spotifyClientSecret, 
-  spotifyClientId,
-  mainDeviceName
-} = require('./environment.js')
-
 const { DeviceDiscovery, Listener } = require('sonos');
+const { mainDeviceName } = require('./environment.js');
+const spotifyController = require('./controllers/spotify.js');
 
 let mainDevice;
 let otherDevices = {};
@@ -94,7 +87,7 @@ Listener.on('ZoneGroupTopology', result => {
 
 app.use(express.static('web'))
 
-app.use('/spotify', require('./controllers/spotify.js'))
+app.use('/spotify', spotifyController.router)
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname + '/web/index.html'));
@@ -133,35 +126,48 @@ io.on('connection', (socket) => {
   })
 
   socket.on('sonos-library', async (resp) => {
-    if (
-      spotifyUserId == null || 
-      spotifyClientSecret == null ||
-      spotifyClientId == null
-    ) {
-      console.log('Spotify credentials not found')
+    try {
+      let myPlaylists = await spotifyController.getMyPlaylists()
+
       resp({
-        isAuthenticated: false
+        data: myPlaylists,
+        error: null
+      });
+    } catch(e) {
+      resp({
+        error: e.message
       })
-      return;
     }
 
-    let playlists = await spotifyApi.getUserPlaylists()
+    // if (
+    //   spotifyUserId == null || 
+    //   spotifyClientSecret == null ||
+    //   spotifyClientId == null
+    // ) {
+    //   console.log('Spotify credentials not found')
+    //   resp({
+    //     isAuthenticated: false
+    //   })
+    //   return;
+    // }
 
-    playlists = playlists.body.items.map((playlist) => {
-      let parts = playlist.uri.split(':')
-      let id = parts[parts.length-1]
-      let correctedURI = `spotify:user:${spotifyUserId}:playlist:${id}`
+    // let playlists = await spotifyApi.getUserPlaylists()
 
-      return {
-        name: playlist.name,
-        uri: correctedURI
-      }
-    })
+    // playlists = playlists.body.items.map((playlist) => {
+    //   let parts = playlist.uri.split(':')
+    //   let id = parts[parts.length-1]
+    //   let correctedURI = `spotify:user:${spotifyUserId}:playlist:${id}`
 
-    resp({
-      isAuthenticated: true,
-      playlists
-    });
+    //   return {
+    //     name: playlist.name,
+    //     uri: correctedURI
+    //   }
+    // })
+
+    // resp({
+    //   isAuthenticated: true,
+    //   playlists
+    // });
   })
 });
 

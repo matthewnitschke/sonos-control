@@ -21,7 +21,7 @@ router.get("/login", (req, res) => {
     res.status(400).send("Missing spotify env vars")
   }
 
-  let scopes = "user-read-private user-read-email";
+  let scopes = "user-read-private user-read-email playlist-read-private";
   res.redirect(
     "https://accounts.spotify.com/authorize" +
       "?response_type=code" +
@@ -50,18 +50,27 @@ router.get('/auth-redirect', async (req, res) => {
   }
 });
 
-router.get('/playlists', async (req, res) => {
-  try {
-    let myId = (await spotifyApi.getMe()).id;
+async function getMyPlaylists() {
+  let myId = (await spotifyApi.getMe()).id;
     
-    let playlists = await spotifyApi.getUserPlaylists(myId);
+  let playlists = await spotifyApi.getUserPlaylists(myId);
 
-    res.json(playlists)
-  } catch(e) {
-    console.error(e.message)
+  playlists = playlists.body.items.map((playlist) => {
+    let parts = playlist.uri.split(':')
+    let id = parts[parts.length-1]
+    let correctedURI = `spotify:user:${spotifyUserId}:playlist:${id}`
 
-    res.status(400).send(`Something went wrong: ${e.message}`)
-  }
-})
+    return {
+      name: playlist.name,
+      uri: correctedURI
+    }
+  })
 
-module.exports = router
+  return playlists
+}
+
+
+module.exports = {
+  router,
+  getMyPlaylists
+}
