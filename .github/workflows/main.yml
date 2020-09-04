@@ -16,4 +16,5 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: matthewnitschke/sonos-control
           tags: latest
+          tag_with_sha: true
 
