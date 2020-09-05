@@ -17,6 +17,8 @@ abstract class PlayState implements Built<PlayState, PlayStateBuilder> {
 
   /// the album artwork url for the current track on the main device speaker
   String get currentAlbumArtworkUrl;
+  
+  String get currentAlbumArtworkAverageColor;
 
   factory PlayState([void Function(PlayStateBuilder) updates]) = _$PlayState;
   PlayState._();

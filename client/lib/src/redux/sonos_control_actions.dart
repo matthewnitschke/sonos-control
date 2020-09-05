@@ -37,11 +37,13 @@ class SetCurrentTrackAction {
   final String currentTrackName;
   final String currentArtistName;
   final String currentAlbumArtworkUrl;
+  final String currentAlbumArtworkAverageColor;
 
   SetCurrentTrackAction({
     this.currentTrackName,
     this.currentArtistName,
     this.currentAlbumArtworkUrl,
+    this.currentAlbumArtworkAverageColor,
   });
 }
 

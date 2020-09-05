@@ -10,6 +10,8 @@ const { DeviceDiscovery, Listener } = require('sonos');
 const { mainDeviceName } = require('./environment.js');
 const spotifyController = require('./controllers/spotify.js');
 
+const { getAverageColor } = require('./utils.js')
+
 let mainDevice;
 let otherDevices = {};
 
@@ -29,9 +31,15 @@ DeviceDiscovery((device) => {
         io.sockets.emit('play-state-change', result)
       })
 
-      mainDevice.on('CurrentTrack', result => {
+      mainDevice.on('CurrentTrack', async (result) => {
         currentTrack = result
         console.log(currentTrack);
+
+        // result.albumArtURI
+        let color = await getAverageColor(result.albumArtURI)
+
+        result.averageColor = color;
+
         io.sockets.emit('current-track-change', result)
       })
 

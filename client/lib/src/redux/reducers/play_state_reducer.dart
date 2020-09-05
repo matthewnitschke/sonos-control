@@ -23,5 +23,6 @@ PlayStateBuilder _setCurrentTrack(PlayStateBuilder state, SetCurrentTrackAction 
   return state
     ..currentArtistName = action.currentArtistName
     ..currentTrackName = action.currentTrackName
-    ..currentAlbumArtworkUrl = action.currentAlbumArtworkUrl;
+    ..currentAlbumArtworkUrl = action.currentAlbumArtworkUrl
+    ..currentAlbumArtworkAverageColor = action.currentAlbumArtworkAverageColor;
 }

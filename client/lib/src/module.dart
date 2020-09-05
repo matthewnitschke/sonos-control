@@ -37,6 +37,7 @@ class SonosControlModule {
           ..currentAlbumArtworkUrl = ''
           ..currentArtistName = ''
           ..currentTrackName = ''
+          ..currentAlbumArtworkAverageColor = ''
         )
         ..musicLibrary = (MusicLibraryBuilder()
           ..isSpotifyAuthed = true

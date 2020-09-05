@@ -17,6 +17,8 @@ class _$PlayState extends PlayState {
   final String currentArtistName;
   @override
   final String currentAlbumArtworkUrl;
+  @override
+  final String currentAlbumArtworkAverageColor;
 
   factory _$PlayState([void Function(PlayStateBuilder) updates]) =>
       (new PlayStateBuilder()..update(updates)).build();
@@ -26,7 +28,8 @@ class _$PlayState extends PlayState {
       this.volume,
       this.currentTrackName,
       this.currentArtistName,
-      this.currentAlbumArtworkUrl})
+      this.currentAlbumArtworkUrl,
+      this.currentAlbumArtworkAverageColor})
       : super._() {
     if (isPlaying == null) {
       throw new BuiltValueNullFieldError('PlayState', 'isPlaying');
@@ -42,6 +45,10 @@ class _$PlayState extends PlayState {
     }
     if (currentAlbumArtworkUrl == null) {
       throw new BuiltValueNullFieldError('PlayState', 'currentAlbumArtworkUrl');
+    }
+    if (currentAlbumArtworkAverageColor == null) {
+      throw new BuiltValueNullFieldError(
+          'PlayState', 'currentAlbumArtworkAverageColor');
     }
   }
 
@@ -60,17 +67,21 @@ class _$PlayState extends PlayState {
         volume == other.volume &&
         currentTrackName == other.currentTrackName &&
         currentArtistName == other.currentArtistName &&
-        currentAlbumArtworkUrl == other.currentAlbumArtworkUrl;
+        currentAlbumArtworkUrl == other.currentAlbumArtworkUrl &&
+        currentAlbumArtworkAverageColor ==
+            other.currentAlbumArtworkAverageColor;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
         $jc(
-            $jc($jc($jc(0, isPlaying.hashCode), volume.hashCode),
-                currentTrackName.hashCode),
-            currentArtistName.hashCode),
-        currentAlbumArtworkUrl.hashCode));
+            $jc(
+                $jc($jc($jc(0, isPlaying.hashCode), volume.hashCode),
+                    currentTrackName.hashCode),
+                currentArtistName.hashCode),
+            currentAlbumArtworkUrl.hashCode),
+        currentAlbumArtworkAverageColor.hashCode));
   }
 
   @override
@@ -80,7 +91,9 @@ class _$PlayState extends PlayState {
           ..add('volume', volume)
           ..add('currentTrackName', currentTrackName)
           ..add('currentArtistName', currentArtistName)
-          ..add('currentAlbumArtworkUrl', currentAlbumArtworkUrl))
+          ..add('currentAlbumArtworkUrl', currentAlbumArtworkUrl)
+          ..add('currentAlbumArtworkAverageColor',
+              currentAlbumArtworkAverageColor))
         .toString();
   }
 }
@@ -111,6 +124,12 @@ class PlayStateBuilder implements Builder<PlayState, PlayStateBuilder> {
   set currentAlbumArtworkUrl(String currentAlbumArtworkUrl) =>
       _$this._currentAlbumArtworkUrl = currentAlbumArtworkUrl;
 
+  String _currentAlbumArtworkAverageColor;
+  String get currentAlbumArtworkAverageColor =>
+      _$this._currentAlbumArtworkAverageColor;
+  set currentAlbumArtworkAverageColor(String currentAlbumArtworkAverageColor) =>
+      _$this._currentAlbumArtworkAverageColor = currentAlbumArtworkAverageColor;
+
   PlayStateBuilder();
 
   PlayStateBuilder get _$this {
@@ -120,6 +139,7 @@ class PlayStateBuilder implements Builder<PlayState, PlayStateBuilder> {
       _currentTrackName = _$v.currentTrackName;
       _currentArtistName = _$v.currentArtistName;
       _currentAlbumArtworkUrl = _$v.currentAlbumArtworkUrl;
+      _currentAlbumArtworkAverageColor = _$v.currentAlbumArtworkAverageColor;
       _$v = null;
     }
     return this;
@@ -146,7 +166,8 @@ class PlayStateBuilder implements Builder<PlayState, PlayStateBuilder> {
             volume: volume,
             currentTrackName: currentTrackName,
             currentArtistName: currentArtistName,
-            currentAlbumArtworkUrl: currentAlbumArtworkUrl);
+            currentAlbumArtworkUrl: currentAlbumArtworkUrl,
+            currentAlbumArtworkAverageColor: currentAlbumArtworkAverageColor);
     replace(_$result);
     return _$result;
   }

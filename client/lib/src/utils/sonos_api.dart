@@ -62,6 +62,7 @@ class SonosEventAPI {
           currentTrackName: data['title'] as String,
           currentArtistName: data['artist'] as String,
           currentAlbumArtworkUrl: data['albumArtURI'] as String,
+          currentAlbumArtworkAverageColor: data['averageColor'] as String,
         ));
       }
 
@@ -70,7 +71,6 @@ class SonosEventAPI {
     socket.on('topology-change', (res) {
       if (res == null) return;
 
-      print("INP: $_topoPacketTracker");
       if (_topoPacketTracker <= 0) {
         final speakers = BuiltMap<String, bool>(res);
 
