@@ -33,7 +33,7 @@ module.exports = {
         // console.log('Dominant average color: ', fac.getColorFromArray4(imageData.data, { algorithm: 'dominant'}));
 
         const color = fac.getColorFromArray4(imageData.data, { 
-            algorithm: 'simple',
+            algorithm: 'dominant',
             left: imageData.width - size
         })
 
