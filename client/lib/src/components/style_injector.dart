@@ -16,7 +16,12 @@ UiFactory<StyleInjectorProps> StyleInjector = connect<SonosControlState, StyleIn
   mapDispatchToProps: (dispatch) => (StyleInjector()),
 )(
   uiFunction((props) {
-    final fgColor = getContrastYIQ(props.backgroundColor);
-    return Dom.style()(':root { --main-fg-color: $fgColor; }');
+    final isDark = isDarkFg(props.backgroundColor);
+    return Dom.style()("""
+      :root { 
+        --main-fg-color: ${isDark ? '#393b44' : '#f1f3f8'}; 
+        --secondary-fg-color: ${isDark ? '#8d93ab' : '#d6e0f0'}
+      }
+    """);
   }, $StyleInjectorConfig, // ignore: undefined_identifier, argument_type_not_assignable
 ));
