@@ -48,13 +48,13 @@ $background-color: #000;
     margin-top: 1.5rem;
     font-weight: bold;
 
+    color: var(--main-fg-color);
+
     .track-name {
-      color: #fff;
       font-size: 50px;
     }
 
     .artist-name {
-      color: grey;
       font-size: 30px;
     }
   }
@@ -62,7 +62,7 @@ $background-color: #000;
   .playback-control {
     font-size: 1.5rem;
     display: flex;
-    color: #fff;
+    color: var(--main-fg-color);
     justify-content: space-around;
   }
 
