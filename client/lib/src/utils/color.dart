@@ -3,6 +3,8 @@ String getContrastYIQ(String hexcolor) {
 }
 
 bool isDarkFg(String hexcolor) {
+  if (hexcolor == null || hexcolor.length != 6) return false;
+
   var r = int.parse(hexcolor.substring(0,2), radix: 16);
 	var g = int.parse(hexcolor.substring(2,2), radix: 16);
 	var b = int.parse(hexcolor.substring(4,2), radix: 16);
