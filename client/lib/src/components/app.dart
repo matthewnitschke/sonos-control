@@ -4,6 +4,7 @@ import 'package:over_react/over_react.dart';
 import 'package:over_react/over_react_redux.dart';
 import 'package:sonos_control_dart/src/components/current_track_album_artwork.dart';
 import 'package:sonos_control_dart/src/components/current_track_info.dart';
+import 'package:sonos_control_dart/src/components/style_injector.dart';
 import 'package:sonos_control_dart/src/components/utils/panel.dart';
 import 'package:sonos_control_dart/src/components/playback_control.dart';
 import 'package:sonos_control_dart/src/components/room_manager.dart';
@@ -30,6 +31,7 @@ UiFactory<AppProps> App = connect<SonosControlState, AppProps>(
         'backgroundColor': '#${props.backgroundColor}'
       }
     )(
+      StyleInjector()(),
       (Panel()
         ..position = 'left'
       )(
