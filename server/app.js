@@ -35,6 +35,12 @@ DeviceDiscovery((device) => {
         currentTrack = result
         console.log(currentTrack);
 
+        // if current.track.title == null, then the track itself is null, emulate a null track
+        if (currentTrack.title == null) {
+          currentTrack = null;
+        }
+
+
         // result.albumArtURI
         let color = await getAverageColor(result.albumArtURI)
 
