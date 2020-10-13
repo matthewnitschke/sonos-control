@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const ip = require('ip')
 const rgbHex = require('rgb-hex');
 
@@ -6,6 +8,7 @@ const FastAverageColor = require('fast-average-color');
 const fac = new FastAverageColor();
 
 
+const spotifyRefreshTokenPath = '.spotify-tokens.json';
 
 module.exports = {
     getServerAddress: () => {
@@ -38,5 +41,36 @@ module.exports = {
         })
 
         return rgbHex(color[0], color[1], color[2])
+    },
+    loadSpotifyTokens: () => {
+        return new Promise((res, rej) => {
+            if (fs.existsSync(spotifyRefreshTokenPath)) {
+                let tokens = require(`./${spotifyRefreshTokenPath}`);
+
+                tokens.expiresInDate = new Date(tokens.expiresInDate)
+
+                res(tokens);
+            } else {
+                throw new Error('Token file missing');
+            }
+        });
+    },
+    saveSpotifyTokens: (accessToken, refreshToken, expiresIn) => {
+        return new Promise((res, rej) => {
+            try {
+                let expiresInDate = new Date();
+                expiresInDate.setSeconds(expiresIn);
+                
+                let data = JSON.stringify({
+                    accessToken,
+                    refreshToken,
+                    expiresInDate: expiresInDate.toISOString(),
+                })
+                console.log(data);
+                fs.writeFile(spotifyRefreshTokenPath, data, {}, res);
+            } catch(e) {
+                rej(e)
+            }
+        });
     }
 }

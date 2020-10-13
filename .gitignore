@@ -9,3 +9,6 @@ server-runner.sh
 client/build
 
 run-server.sh
+
+.env
+.spotify-tokens.json

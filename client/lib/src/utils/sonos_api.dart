@@ -7,8 +7,6 @@ import 'package:sonos_control_dart/src/models/sonos_control_state.sg.dart';
 import 'package:sonos_control_dart/src/redux/sonos_control_actions.dart';
 import 'package:sonos_control_dart/src/utils/socket.dart';
 
-
-
 int _playStatePacketTracker = 0;
 
 Timer _topoTimeout;
@@ -18,6 +16,9 @@ int _topoPacketTracker = 0;
 // method for preventing request debounces
 bool _acceptVolumePackets = true;
 Timer _volumePacketTimeout;
+
+bool _acceptPlayStatePackets = true;
+Timer _playStatePacketTimeout;
 class SonosEventAPI {
   Store<SonosControlState> _store;
 
@@ -49,6 +50,43 @@ class SonosEventAPI {
       if (_acceptVolumePackets) {
         final volume = res as int;
         _store.dispatch(SetVolumeAction(volume, sendToServer: false));
+      }
+    });
+
+    socket.on('spotify-playing-track-change', (res) {
+      final data = res as Map<String, dynamic>;
+
+      if (data['connected'] as bool) {
+        _store.dispatch(SetCurrentTrackAction(
+          currentTrackName: data['trackName'] as String,
+          currentArtistName: data['artistName'] as String,
+          currentAlbumArtworkUrl: data['albumArtworkUrl'] as String,
+          currentAlbumArtworkAverageColor: data['albumArtworkAverageColor'] as String,
+        ));
+      } else {
+        // spotify not connected, prompt for connect
+      }
+    });
+
+    socket.on('spotify-playback-state-change', (res) {
+      final data = res as Map<String, dynamic>;
+
+      if (data['connected'] as bool) {
+        if (_acceptPlayStatePackets) {
+          _store.dispatch(SetPlayStateAction(
+            data['isPlaying'] as bool,
+            sendToServer: false
+          ));
+        }
+
+        if (_acceptVolumePackets) {
+          _store.dispatch(SetVolumeAction(
+            data['volume'] as int,
+            sendToServer: false,
+          ));
+        }
+      } else {
+        // not connected
       }
     });
 
@@ -90,7 +128,12 @@ class SonosActionAPI {
   SonosActionAPI() : _socket = ServerSocket().socket;
 
   void setPlayState(bool isPlaying) {
-    _playStatePacketTracker++;
+    _acceptPlayStatePackets = false;
+    _playStatePacketTimeout?.cancel();
+    _playStatePacketTimeout = Timer(Duration(seconds: 3), () {
+      _acceptPlayStatePackets = true;
+    });
+
     _socket.emit('setIsPlaying', isPlaying);
   }
 

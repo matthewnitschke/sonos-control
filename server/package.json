@@ -4,16 +4,20 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "start-doppler": "doppler run -- yarn start"
   },
   "dependencies": {
+    "axios": "^0.20.0",
     "canvas": "^2.6.1",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "fast-average-color": "^6.0.2",
     "ip": "^1.1.5",
     "rgb-hex": "^3.0.0",
     "socket.io": "^2.3.0",
     "sonos": "^1.13.0",
-    "spotify-web-api-node": "^4.0.0"
+    "spotify-web-api-node": "^4.0.0",
+    "to-mils": "^1.0.2"
   }
 }

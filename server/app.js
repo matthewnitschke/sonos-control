@@ -8,7 +8,7 @@ const io = require('socket.io')(http);
 
 const { DeviceDiscovery, Listener } = require('sonos');
 const { mainDeviceName } = require('./environment.js');
-const spotifyController = require('./controllers/spotify.js');
+const spotifyControllerFactory = require('./controllers/spotify.js');
 
 const { getAverageColor } = require('./utils.js')
 
@@ -26,33 +26,33 @@ DeviceDiscovery((device) => {
       mainDevice = device
       Listener.subscribeTo(mainDevice)
 
-      mainDevice.on('PlayState', result => {
-        currentState = result
-        io.sockets.emit('play-state-change', result)
-      })
+      // mainDevice.on('PlayState', result => {
+      //   currentState = result
+      //   io.sockets.emit('play-state-change', result)
+      // })
 
-      mainDevice.on('CurrentTrack', async (result) => {
-        currentTrack = result
-        console.log(currentTrack);
+      // mainDevice.on('CurrentTrack', async (result) => {
+      //   currentTrack = result
+      //   console.log(currentTrack);
 
-        // if current.track.title == null, then the track itself is null, emulate a null track
-        if (currentTrack.title == null) {
-          currentTrack = null;
-        }
+      //   // if current.track.title == null, then the track itself is null, emulate a null track
+      //   if (currentTrack.title == null) {
+      //     currentTrack = null;
+      //   }
 
 
-        // result.albumArtURI
-        let color = await getAverageColor(result.albumArtURI)
+      //   // result.albumArtURI
+      //   let color = await getAverageColor(result.albumArtURI)
 
-        result.averageColor = color;
+      //   result.averageColor = color;
 
-        io.sockets.emit('current-track-change', result)
-      })
+      //   io.sockets.emit('current-track-change', result)
+      // })
 
-      mainDevice.on('Volume', result => {
-        currentVolume = result
-        io.sockets.emit('volume-change', result)
-      })
+      // mainDevice.on('Volume', result => {
+      //   currentVolume = result
+      //   io.sockets.emit('volume-change', result)
+      // })
     } else {
       otherDevices[desc.roomName] = device
     }
@@ -101,7 +101,7 @@ Listener.on('ZoneGroupTopology', result => {
 
 app.use(express.static('web'))
 
-app.use('/spotify', spotifyController.router)
+app.use('/spotify', spotifyControllerFactory(io))
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname + '/web/index.html'));
