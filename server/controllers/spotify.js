@@ -202,9 +202,6 @@ module.exports = (io) => {
   return router;
 }
 
-
-
-
 // async function getMyPlaylists() {
 //   let myId = (await spotifyApi.getMe()).id;
     
@@ -222,10 +219,4 @@ module.exports = (io) => {
 //   })
 
 //   return playlists
-// }
-
-
-// module.exports = {
-//   router,
-//   getMyPlaylists
 // }
